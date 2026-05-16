@@ -16,7 +16,6 @@ ROOT = Path(__file__).resolve().parents[1]
 MAX_AGENT_POINTER_LINES = 50
 MAX_SKILL_LINES = 500
 ROOT_MARKDOWN_ALLOWLIST = {
-    "AGENT.md",
     "AGENTS.md",
     "CLAUDE.md",
     "README.md",
@@ -148,7 +147,7 @@ def check_agent_pointer(name: str) -> list[Violation]:
 
     text = "\n".join(lines)
     required_patterns = {
-        "AGENTS.md": ["README.md", "AGENT.md", "make check", "skills/", "docs/adr/0001-harness-guardrails.md"],
+        "AGENTS.md": ["README.md", "docs/index.md", "make check", "skills/", "docs/adr/0001-harness-guardrails.md"],
         "CLAUDE.md": ["AGENTS.md", "make check"],
     }[name]
     for pattern in required_patterns:

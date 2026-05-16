@@ -9,7 +9,6 @@ This file is the short entry point for coding agents. Keep it as a pointer, not 
 - Architecture map: `docs/ARCHITECTURE.md`
 - Operations playbook: `docs/OPERATIONS.md`
 - Quality gates: `docs/QUALITY.md`
-- Legacy internal notes: `AGENT.md`
 - Translation workflow skill: `skills/report-translation-workflow/SKILL.md`
 - Memory maintenance skill: `skills/translation-memory-builder/SKILL.md`
 - Source cleanup skill: `skills/report-source-preparation/SKILL.md`
