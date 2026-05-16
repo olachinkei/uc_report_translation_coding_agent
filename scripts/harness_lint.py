@@ -293,6 +293,29 @@ def check_jsonl_memory() -> list[Violation]:
     return violations
 
 
+def check_forbidden_translation_phrases(files: list[Path]) -> list[Violation]:
+    violations: list[Violation] = []
+    targets = []
+    for path in files:
+        if path.suffix.lower() != ".md":
+            continue
+        rel_parts = path.relative_to(ROOT).parts
+        if rel_parts[:2] in {("data", "past_markdown_files")}:
+            targets.append(path)
+
+    for path in targets:
+        text = path.read_text(encoding="utf-8")
+        if "Dear Investors," in text:
+            violations.append(
+                Violation(
+                    path=path,
+                    message="Forbidden greeting phrase `Dear Investors,` is present.",
+                    fix="Use the required recurring wording `To our valued investors,`.",
+                )
+            )
+    return violations
+
+
 def main() -> int:
     files = iter_files()
     violations: list[Violation] = []
@@ -305,6 +328,7 @@ def main() -> int:
     violations.extend(check_skill_agent_metadata(files))
     violations.extend(check_python_parse(files))
     violations.extend(check_jsonl_memory())
+    violations.extend(check_forbidden_translation_phrases(files))
 
     if violations:
         print("Harness lint failed. Fix these deterministic issues:\n", file=sys.stderr)

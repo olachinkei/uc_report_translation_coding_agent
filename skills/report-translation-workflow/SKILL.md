@@ -21,6 +21,10 @@ If `data/knowledge/section_pairs.jsonl` does not exist or looks stale after data
 ### 1. Inspect and segment the source file
 
 - Parse the markdown into sections by heading.
+- Analyze each section before translating it. Identify:
+  - the section label and likely reusable wording
+  - all names, dates, years, percentages, counts, fund names, and company names
+  - quotations, captions, tables, note markers, and markdown that must remain distinct
 - Keep heading depth exactly as written in the source unless the user explicitly asks for restructuring.
 - Classify each section before translating. Useful labels in this project are:
   - `greeting`
@@ -37,6 +41,7 @@ When a section contains subheadings, translate it subsection by subsection inste
 ### 2. Retrieve reusable examples before translating
 
 - Search `data/knowledge/` first for stable wording that should stay consistent across years.
+- Include the relevant or similar `.txt` knowledge content in the translation prompt for each section. For example, the `greeting` section must include `data/knowledge/1_greeting.txt` when available.
 - Search the bilingual markdown corpus next.
 - Prefer retrieving 1-3 high-confidence examples per section instead of flooding the prompt.
 - Use `scripts/prepare_translation_prompt.py` to assemble:
@@ -76,19 +81,25 @@ python3 skills/report-translation-workflow/scripts/prepare_translation_prompt.py
 - Keep an investor-facing tone: clear, formal, and natural, not word-for-word literal.
 - Reuse stable phrasing from past reports when the meaning is genuinely the same.
 - Do not force reuse if the new year changes the substance.
+- Non-negotiable recurring wording:
+  - Translate the greeting opener `投資家の皆さま` exactly as `To our valued investors,`.
+  - Never use `Dear Investors,`.
+  - Translate `ごあいさつ` as `Greeting` unless the user explicitly requests another heading.
 
 ### 4. Validate and review
 
 Run a validation loop before finalizing:
 
-1. Review the translated section against the source.
-2. Fix omissions, number/name drift, and markdown breakage.
-3. Run `make check`.
-4. Repeat until the review and deterministic checks pass.
+1. Review the translated section against the source line by line.
+2. Check for accidental summarization, omitted facts, missing sentences, number/name drift, and markdown breakage.
+3. If omissions or over-summarization are found, retranslate the affected section before moving on.
+4. Run `make check`.
+5. Repeat until the review and deterministic checks pass.
 
 Check every translated section for:
 
 - omitted facts
+- accidental summarization or compression of source content
 - changed numbers or dates
 - mistranslated proper nouns
 - broken markdown structure
