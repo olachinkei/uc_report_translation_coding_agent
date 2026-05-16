@@ -5,12 +5,7 @@ Use these workflows for recurring repository work.
 ## Translate A Report
 
 1. Place the Japanese source markdown in `data/past_markdown_files/`.
-2. Run the translation runner:
-
-```bash
-python3 src/translate_report.py "Unison Impact_J_2024.md" --overwrite
-```
-
+2. Ask Codex to translate it into `outputs/drafts/`, using `prompt.md`, `data/knowledge/`, and past markdown files as references.
 3. Review the draft in `outputs/drafts/`.
 4. Move accepted deliverables to `outputs/final/` when ready.
 5. Run `make check`.
@@ -41,13 +36,7 @@ python3 skills/report-docx-export/scripts/export_markdown_to_docx.py \
 3. Use the `.docx` in `outputs/final/` as the Word deliverable.
 4. Run `make check`.
 
-Debug prompts can be written to `outputs/prompts/`:
-
-```bash
-python3 src/translate_report.py "Unison Impact_J_2024.md" \
-  --prompt-dir outputs/prompts \
-  --overwrite
-```
+Debug prompts or review notes may be written to `outputs/prompts/` when needed.
 
 ## Refresh Translation Memory
 

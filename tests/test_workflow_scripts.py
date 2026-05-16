@@ -26,7 +26,6 @@ docx_exporter = load_module(
     "skills/report-docx-export/scripts/export_markdown_to_docx.py",
     "export_markdown_to_docx",
 )
-translator = load_module("src/translate_report.py", "translate_report")
 
 
 class SourcePreparationScriptTests(unittest.TestCase):
@@ -95,12 +94,6 @@ class DocxExportScriptTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "Reference doc must be a `.docx` file"):
                 docx_exporter.resolve_reference_doc(wrong_suffix)
             self.assertEqual(docx_exporter.resolve_reference_doc(reference), reference)
-
-
-class TranslationRunnerTests(unittest.TestCase):
-    def test_translate_default_output_uses_drafts_dir(self) -> None:
-        output = translator.default_output_path(Path("Unison Impact_J_2025.md"))
-        self.assertEqual(output, translator.DEFAULT_OUTPUT_DIR / "Unison Impact_E_2025.md")
 
 
 if __name__ == "__main__":

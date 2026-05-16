@@ -19,14 +19,9 @@
 この repository の主要なコマンドはローカルで実行します。
 
 - Word `.docx` 変換には `pandoc` が必要です。
-- 翻訳と `make check` には `OPENAI_API_KEY` が必要です。
 - 出力先に同名ファイルがある場合、上書きするには `--overwrite` を付けます。
 
-API キーは次のように設定します。
-
-```bash
-export OPENAI_API_KEY="..."
-```
+翻訳は Codex に依頼して進める前提です。OpenAI API key は不要です。
 
 ## できること
 
@@ -76,10 +71,12 @@ data/past_markdown_files/Unison Impact_J_2025.md
 data/past_markdown_files/
 ```
 
-翻訳を実行します。
+Codex に翻訳を依頼します。
 
-```bash
-python3 src/translate_report.py "Unison Impact_J_2025.md" --overwrite
+```text
+data/past_markdown_files/Unison Impact_J_2025.md を英語に翻訳して、
+outputs/drafts/Unison Impact_E_2025.md に保存してください。
+過去レポート、data/knowledge、prompt.md を参照して、数値・固有名詞・見出し構造を保ってください。
 ```
 
 出力先:

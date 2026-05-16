@@ -60,7 +60,13 @@ python3 skills/report-translation-workflow/scripts/prepare_translation_prompt.py
 ```
 
 ```bash
-python3 src/translate_report.py "Unison Impact_J_2024.md" --overwrite
+python3 skills/report-translation-workflow/scripts/prepare_translation_prompt.py \
+  --source-md data/past_markdown_files/Unison\ Impact_J_2024.md \
+  --section "ごあいさつ" \
+  --template prompt.md \
+  --memory-file data/knowledge/section_pairs.jsonl \
+  --knowledge-dir data/knowledge \
+  --output outputs/prompts/greeting.prompt.md
 ```
 
 ### 3. Translate section by section
@@ -122,4 +128,4 @@ When the user says "change this paragraph" or "make this sentence softer":
 
 - Translation style and guardrails: `references/translation-rules.md`
 - Prompt assembly helper: `scripts/prepare_translation_prompt.py`
-- End-to-end runner: `/Users/keisuke/Project/Accounts/UC/uc_report_translation_coding_agent/src/translate_report.py`
+- Prompt assembly helper: `scripts/prepare_translation_prompt.py`

@@ -14,10 +14,6 @@ test:
 		$(PYTHON) -m unittest discover -s tests; \
 		status=$$?; \
 	fi; \
-	if [ $$status -eq 0 ]; then \
-		$(PYTHON) tests/live_translation_smoke.py; \
-		status=$$?; \
-	fi; \
 	$(MAKE) --no-print-directory clean-pycache >/dev/null; \
 	exit $$status
 

@@ -21,6 +21,7 @@ This runs:
 - Generated cache files and `.DS_Store` files are not allowed.
 - Translation output markdown does not live at repository root.
 - `docs/generated/` must match `scripts/refresh_generated_docs.py --check`.
+- `make check` must not require an OpenAI API key.
 
 ## Translation Quality
 

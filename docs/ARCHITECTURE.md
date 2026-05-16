@@ -18,8 +18,8 @@ This repository supports section-based Japanese-to-English report translation wi
 1. Raw reports are preserved in `data/past_raw_files/`.
 2. Clean markdown corpus files live in `data/past_markdown_files/`.
 3. `skills/translation-memory-builder/scripts/extract_section_pairs.py` builds `data/knowledge/section_pairs.jsonl`.
-4. `skills/report-translation-workflow/scripts/prepare_translation_prompt.py` assembles section prompts from source context, curated knowledge, and bilingual examples.
-5. `src/translate_report.py` writes English drafts to `outputs/drafts/` unless `--output` is provided.
+4. Codex translates sections using source context, curated knowledge, bilingual examples, and `prompt.md`.
+5. English drafts are written to `outputs/drafts/`.
 6. `skills/report-docx-export/scripts/export_markdown_to_docx.py` exports reviewed markdown to `outputs/final/`.
 
 ## Generated Knowledge

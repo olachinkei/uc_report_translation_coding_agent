@@ -17,8 +17,6 @@
 ├── AGENT.md
 ├── README.md
 ├── prompt.md
-├── src
-│   └── translate_report.py
 ├── data
 │   ├── past_raw_files
 │   ├── past_markdown_files
@@ -42,8 +40,6 @@
 - `prompt.md`
   - 翻訳時のベースプロンプト
   - 固定訳辞書もここに集約する
-- `src/translate_report.py`
-  - 日本語 markdown を読み、章ごとに prompt を組み立てて `outputs/drafts/` に英語 markdown を生成する runner
 - `data/past_raw_files`
   - 過去レポートの raw Word `.docx`
   - 原本置き場であり、通常は編集しない
@@ -223,20 +219,19 @@ Python 実装は、offline preparation と translation execution を分けてい
 - knowledge 側にも `greeting` や `quantification` の bonus を付ける
 - source markdown 側でも preface/noise section を落として context を安定化させる
 
-#### `src/translate_report.py`
+#### Codex 翻訳
 
 役割:
 
-- 入力 markdown を section ごとに翻訳する orchestration runner
-- `prepare_translation_prompt.py` を呼び出して prompt を組み立てる
-- OpenAI Responses API を使って section 単位で翻訳する
+- 入力 markdown を section ごとに翻訳する
+- `prepare_translation_prompt.py` や `prompt.md` の考え方を使って、過去例と curated knowledge を参照する
 - 出力 `.md` を `outputs/drafts/` に書く
 
 入出力ルール:
 
 - 入力: `data/past_markdown_files` の日本語 markdown
 - 出力: `outputs/drafts/` の英語 markdown
-- 既定では `_J_` を `_E_` に置換してファイル名を作る
+- 既定では `_J_` を `_E_` に置換したファイル名にする
 
 ### 6.3 実装上の前提
 
