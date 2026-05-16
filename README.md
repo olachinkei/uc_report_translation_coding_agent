@@ -4,8 +4,6 @@
 
 ビジネスユーザーは、基本的に **Codex に依頼するだけ** で作業を進めます。コマンド実行、ファイル変換、翻訳、レビュー、出力作成は Codex が行います。
 
-内部構成や agent 向けの詳細は [docs/index.md](docs/index.md) にあります。通常の利用では、この README の依頼例だけ見れば十分です。
-
 ## この Repository の役割
 
 - 新しい日本語 `.docx` を翻訳しやすい markdown `.md` に変換する
@@ -123,68 +121,3 @@ path/to/reference.docx を reference docx として使ってください。
 
 出力先は outputs/final/Unison Impact_E_2025.docx にしてください。
 ```
-
-## メンテナンス方法
-
-### 過去ファイルの場所
-
-過去レポートは翻訳品質を上げるための材料です。置き場所を分けて管理します。
-
-```text
-data/past_raw_files/
-```
-
-- 過去レポートの原本 `.docx`
-- 編集しない
-- 監査・再変換用に保持する
-
-```text
-data/past_markdown_files/
-```
-
-- 過去レポートの markdown 化済み corpus
-- heading 整理や Word ノイズ除去はここで行う
-- 日英ファイルは `_J_` と `_E_` で対応させる
-
-```text
-data/knowledge/
-```
-
-- 毎年再利用する表現
-- 固定訳や recurring section の説明
-- `section_pairs.jsonl` は過去の日英 markdown から生成される translation memory
-
-### 過去レポートを追加した後
-
-日英の過去レポートを追加・修正したら、Codex に translation memory の更新を依頼してください。
-
-```text
-data/past_markdown_files に追加した過去レポートを確認し、
-日英 section alignment を検証してください。
-
-問題がなければ data/knowledge/section_pairs.jsonl を再生成し、
-最後に make check まで実行してください。
-```
-
-### 出力ファイルの場所
-
-```text
-outputs/drafts/
-```
-
-- 翻訳直後の英語 markdown
-- レビュー・修正対象
-
-```text
-outputs/final/
-```
-
-- 納品候補の `.docx`
-- 必要なら最終版 markdown もここに置く
-
-```text
-outputs/prompts/
-```
-
-- debug 用の section prompt
-- 通常利用では触らなくてよい
