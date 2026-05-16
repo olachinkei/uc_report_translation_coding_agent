@@ -121,3 +121,7 @@ path/to/reference.docx を reference docx として使ってください。
 
 出力先は outputs/final/Unison Impact_E_2025.docx にしてください。
 ```
+
+## その他
+
+来年の翻訳のために、最終化されたファイルを保存する場所、翻訳プロンプト・辞書の場所、変更方法について知りたい場合は、Codex に聞くと確認できます。
