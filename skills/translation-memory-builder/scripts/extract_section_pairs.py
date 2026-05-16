@@ -205,20 +205,125 @@ def build_records(corpus_dir: Path) -> list[dict[str, object]]:
     return records
 
 
+def normalize_heading_key(text: str) -> str:
+    return re.sub(r"\s+", "", text).lower()
+
+
+def build_heading_translation_records(
+    section_records: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    """Create searchable heading-only records and place them before section memory."""
+    grouped: dict[tuple[str, str], dict[str, object]] = {}
+
+    for record in section_records:
+        jp_heading = str(record.get("jp_heading", "")).strip()
+        en_heading = str(record.get("en_heading", "")).strip()
+        if not jp_heading or not en_heading:
+            continue
+        record_labels = record.get("labels", [])
+        if not isinstance(record_labels, list):
+            record_labels = []
+
+        key = (normalize_heading_key(jp_heading), en_heading.lower())
+        entry = grouped.setdefault(
+            key,
+            {
+                "jp_heading": jp_heading,
+                "en_heading": en_heading,
+                "jp_level": record.get("jp_level", 1),
+                "en_level": record.get("en_level", 1),
+                "labels": set(["heading", *record_labels]),
+                "occurrences": [],
+                "years": set(),
+            },
+        )
+
+        labels = entry["labels"]
+        if isinstance(labels, set):
+            labels.update(str(label) for label in record_labels)
+
+        years = entry["years"]
+        if isinstance(years, set) and record.get("year"):
+            years.add(str(record["year"]))
+
+        occurrences = entry["occurrences"]
+        if isinstance(occurrences, list):
+            occurrences.append(
+                {
+                    "jp_file": record.get("jp_file", ""),
+                    "en_file": record.get("en_file", ""),
+                    "section_index": record.get("section_index", ""),
+                    "year": record.get("year", ""),
+                }
+            )
+
+    heading_records: list[dict[str, object]] = []
+    for idx, entry in enumerate(
+        sorted(
+            grouped.values(),
+            key=lambda item: (
+                str(item["jp_heading"]),
+                str(item["en_heading"]).lower(),
+            ),
+        )
+    ):
+        labels = sorted(str(label) for label in entry["labels"]) if isinstance(entry["labels"], set) else ["heading"]
+        years = sorted(str(year) for year in entry["years"]) if isinstance(entry["years"], set) else []
+        occurrences = entry["occurrences"] if isinstance(entry["occurrences"], list) else []
+        jp_heading = str(entry["jp_heading"])
+        en_heading = str(entry["en_heading"])
+        search_terms = sorted(
+            {
+                jp_heading,
+                normalize_heading_key(jp_heading),
+                en_heading,
+                en_heading.lower(),
+                *labels,
+                *years,
+            }
+        )
+
+        seen_in = ", ".join(
+            f"{occurrence['jp_file']}#{occurrence['section_index']}->{occurrence['en_file']}"
+            for occurrence in occurrences
+        )
+        heading_records.append(
+            {
+                "record_type": "heading_translation",
+                "jp_file": "__heading_index__",
+                "en_file": "__heading_index__",
+                "section_index": idx,
+                "year": ",".join(years),
+                "jp_heading": jp_heading,
+                "en_heading": en_heading,
+                "jp_level": entry["jp_level"],
+                "en_level": entry["en_level"],
+                "jp_text": f"見出し翻訳対応: {jp_heading} -> {en_heading}\n出現: {seen_in}",
+                "en_text": f"Heading translation: {jp_heading} -> {en_heading}",
+                "labels": labels,
+                "heading_search_terms": search_terms,
+                "heading_occurrences": occurrences,
+            }
+        )
+
+    return heading_records
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus-dir", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
-    records = build_records(args.corpus_dir)
+    section_records = build_records(args.corpus_dir)
+    records = build_heading_translation_records(section_records) + section_records
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
     with args.output.open("w", encoding="utf-8") as fh:
         for record in records:
             fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-    print(f"Wrote {len(records)} section pairs to {args.output}")
+    print(f"Wrote {len(records)} translation memory records to {args.output}")
 
 
 if __name__ == "__main__":

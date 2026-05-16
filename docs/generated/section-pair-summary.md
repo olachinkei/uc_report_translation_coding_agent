@@ -8,7 +8,7 @@
 
 - Source: `data/knowledge/section_pairs.jsonl`
 
-- Total records: 48
+- Total records: 87
 
 
 
@@ -18,10 +18,13 @@
 
 | year | records |
 | --- | --- |
-| 2021 | 8 |
-| 2022 | 9 |
-| 2023 | 14 |
-| 2024 | 17 |
+| 2021 | 12 |
+| 2021,2022,2023,2024 | 2 |
+| 2021,2024 | 2 |
+| 2022 | 15 |
+| 2022,2024 | 1 |
+| 2023 | 26 |
+| 2024 | 29 |
 
 
 
@@ -31,11 +34,12 @@
 
 | label | records |
 | --- | --- |
-| afterword | 4 |
-| case-study | 18 |
-| cde | 8 |
-| credit | 3 |
-| framework | 8 |
-| greeting | 4 |
-| quantification | 17 |
+| afterword | 5 |
+| case-study | 34 |
+| cde | 14 |
+| credit | 5 |
+| framework | 15 |
+| greeting | 5 |
+| heading | 39 |
+| quantification | 31 |
 

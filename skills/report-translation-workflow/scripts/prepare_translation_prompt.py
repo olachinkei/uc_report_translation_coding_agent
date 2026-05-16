@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter, defaultdict
 import json
 import re
 from pathlib import Path
@@ -248,6 +249,105 @@ def load_records(memory_file: Path) -> list[dict[str, object]]:
         return [json.loads(line) for line in fh if line.strip()]
 
 
+def record_labels(record: dict[str, object]) -> set[str]:
+    labels = record.get("labels", [])
+    if isinstance(labels, list):
+        return {str(label) for label in labels}
+    return set()
+
+
+def build_memory_index(records: list[dict[str, object]]) -> dict[str, object]:
+    """Build a tiny inverted index so prompt retrieval does not scan into context."""
+    inverted: dict[str, set[int]] = defaultdict(set)
+    tokens_by_record: list[set[str]] = []
+    labels_by_record: list[set[str]] = []
+    normalized_headings: list[str] = []
+    record_types: list[str] = []
+
+    for idx, record in enumerate(records):
+        labels = record_labels(record)
+        heading_search_terms = record.get("heading_search_terms", [])
+        if not isinstance(heading_search_terms, list):
+            heading_search_terms = []
+        labels_by_record.append(labels)
+        normalized_headings.append(normalize_heading(str(record.get("jp_heading", ""))))
+        record_types.append(str(record.get("record_type", "section_pair")))
+
+        searchable_text = "\n".join(
+            [
+                str(record.get("record_type", "")),
+                str(record.get("jp_heading", "")),
+                str(record.get("jp_text", "")),
+                str(record.get("en_heading", "")),
+                str(record.get("en_text", "")),
+                " ".join(str(term) for term in heading_search_terms),
+                " ".join(labels),
+            ]
+        )
+        tokens = tokenize(searchable_text)
+        tokens_by_record.append(tokens)
+        for token in tokens:
+            inverted[token].add(idx)
+
+    return {
+        "inverted": dict(inverted),
+        "labels_by_record": labels_by_record,
+        "normalized_headings": normalized_headings,
+        "record_types": record_types,
+        "records": records,
+        "tokens_by_record": tokens_by_record,
+    }
+
+
+def retrieve_memory_candidates(
+    memory_index: dict[str, object],
+    query_heading: str,
+    query_body: str,
+    query_labels: set[str],
+    candidate_limit: int,
+) -> list[dict[str, object]]:
+    records = memory_index["records"]
+    inverted = memory_index["inverted"]
+    labels_by_record = memory_index["labels_by_record"]
+    normalized_headings = memory_index["normalized_headings"]
+    record_types = memory_index.get("record_types", [])
+
+    if not isinstance(records, list):
+        return []
+
+    query_tokens = tokenize(f"{query_heading}\n{query_body}")
+    candidate_scores: Counter[int] = Counter()
+    for token in query_tokens:
+        for record_idx in inverted.get(token, set()):
+            candidate_scores[int(record_idx)] += 1
+
+    normalized_query_heading = normalize_heading(query_heading)
+    for idx, heading in enumerate(normalized_headings):
+        if normalized_query_heading and (
+            heading == normalized_query_heading
+            or normalized_query_heading in heading
+            or heading in normalized_query_heading
+        ):
+            candidate_scores[idx] += 40
+            if isinstance(record_types, list) and idx < len(record_types) and record_types[idx] == "heading_translation":
+                candidate_scores[idx] += 500
+
+    if query_labels:
+        for idx, labels in enumerate(labels_by_record):
+            overlap = len(query_labels & labels)
+            if overlap:
+                candidate_scores[idx] += 12 * overlap
+
+    if not candidate_scores:
+        return records[:candidate_limit]
+
+    selected = [
+        records[idx]
+        for idx, _score in candidate_scores.most_common(max(candidate_limit, 1))
+    ]
+    return selected
+
+
 def clip(text: str, limit: int = 900) -> str:
     text = text.strip()
     if len(text) <= limit:
@@ -330,6 +430,26 @@ def format_examples(records: list[tuple[float, dict[str, object]]], top_k: int) 
 
     blocks: list[str] = []
     for rank, (value, record) in enumerate(records[:top_k], start=1):
+        if record.get("record_type") == "heading_translation":
+            occurrences = record.get("heading_occurrences", [])
+            seen_in = ""
+            if isinstance(occurrences, list):
+                seen_in = ", ".join(
+                    f"{occurrence.get('jp_file', '')}#{occurrence.get('section_index', '')}"
+                    for occurrence in occurrences[:5]
+                    if isinstance(occurrence, dict)
+                )
+            blocks.append(
+                "\n".join(
+                    [
+                        f"### Example {rank} | score={value:.3f} | heading mapping",
+                        f"JP heading: {record['jp_heading']}",
+                        f"EN heading: {record['en_heading']}",
+                        f"Seen in: {seen_in or record.get('year', '')}",
+                    ]
+                )
+            )
+            continue
         blocks.append(
             "\n".join(
                 [
@@ -374,6 +494,7 @@ def main() -> None:
     parser.add_argument("--memory-file", required=True, type=Path)
     parser.add_argument("--knowledge-dir", type=Path)
     parser.add_argument("--top-k", type=int, default=3)
+    parser.add_argument("--candidate-limit", type=int, default=25)
     parser.add_argument("--knowledge-top-k", type=int, default=2)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
@@ -385,8 +506,16 @@ def main() -> None:
     )
     index, section = find_section(sections, args.section)
     records = load_records(args.memory_file)
+    memory_index = build_memory_index(records)
     knowledge_docs = load_knowledge_docs(args.knowledge_dir)
     query_labels = infer_section_labels(args.section, str(section["body"]))
+    candidate_records = retrieve_memory_candidates(
+        memory_index,
+        args.section,
+        str(section["body"]),
+        query_labels,
+        args.candidate_limit,
+    )
 
     scored = [
         (
@@ -395,10 +524,16 @@ def main() -> None:
                 str(section["body"]),
                 str(record["jp_heading"]),
                 str(record["jp_text"]),
+            )
+            + (
+                1.0
+                if record.get("record_type") == "heading_translation"
+                and normalize_heading(args.section) == normalize_heading(str(record.get("jp_heading", "")))
+                else 0.0
             ),
             record,
         )
-        for record in records
+        for record in candidate_records
     ]
     scored = [item for item in scored if item[0] > 0]
     scored.sort(key=lambda item: item[0], reverse=True)

@@ -42,7 +42,8 @@ When a section contains subheadings, translate it subsection by subsection inste
 
 - Search `data/knowledge/` first for stable wording that should stay consistent across years.
 - Include the relevant or similar `.txt` knowledge content in the translation prompt for each section. For example, the `greeting` section must include `data/knowledge/1_greeting.txt` when available.
-- Search the bilingual markdown corpus next.
+- Search the bilingual markdown corpus next. Do not put the whole `data/knowledge/section_pairs.jsonl` file into the prompt; use the prompt preparation script's lightweight token index to retrieve a small candidate set, then include only the top section pairs.
+- `section_pairs.jsonl` starts with `record_type: "heading_translation"` records. Treat these as the preferred source for heading translations, then use section-pair records for body phrasing.
 - Prefer retrieving 1-3 high-confidence examples per section instead of flooding the prompt.
 - Use `scripts/prepare_translation_prompt.py` to assemble:
   - surrounding context
@@ -61,7 +62,8 @@ python3 skills/report-translation-workflow/scripts/prepare_translation_prompt.py
   --section "ごあいさつ" \
   --template prompt.md \
   --memory-file data/knowledge/section_pairs.jsonl \
-  --knowledge-dir data/knowledge
+  --knowledge-dir data/knowledge \
+  --candidate-limit 25
 ```
 
 ```bash
@@ -138,5 +140,4 @@ When the user says "change this paragraph" or "make this sentence softer":
 ## References
 
 - Translation style and guardrails: `references/translation-rules.md`
-- Prompt assembly helper: `scripts/prepare_translation_prompt.py`
 - Prompt assembly helper: `scripts/prepare_translation_prompt.py`

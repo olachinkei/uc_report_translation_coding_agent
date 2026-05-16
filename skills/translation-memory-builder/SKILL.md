@@ -63,7 +63,7 @@ python3 skills/translation-memory-builder/scripts/extract_section_pairs.py \
 make check
 ```
 
-The script aligns sections by file pair and section order. Review mismatches manually when one side contains extra headings or formatting artifacts.
+The script aligns sections by file pair and section order. It writes searchable `record_type: "heading_translation"` records at the top of `section_pairs.jsonl`, followed by full section-pair records. Review mismatches manually when one side contains extra headings or formatting artifacts.
 
 ### 4. Curate reusable knowledge files
 
@@ -93,6 +93,7 @@ Before considering the memory update done, verify:
 
 - each Japanese file has the expected English partner
 - section headings are useful enough to drive retrieval
+- the top of `section_pairs.jsonl` contains searchable heading translation records
 - `section_pairs.jsonl` contains high-signal sections instead of giant unsegmented blobs
 - `data/knowledge/*.txt` contains stable phrasing, not year-specific noise
 - `prompt.md` dictionary additions are actually recurring terms
