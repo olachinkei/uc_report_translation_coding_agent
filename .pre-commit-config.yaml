@@ -1,0 +1,18 @@
+repos:
+  - repo: local
+    hooks:
+      - id: harness-lint
+        name: harness lint
+        entry: python3 scripts/harness_lint.py
+        language: system
+        pass_filenames: false
+      - id: python-compile
+        name: python compile
+        entry: bash -c 'python3 -m compileall -q src skills scripts; status=$?; make clean-pycache >/dev/null; exit $status'
+        language: system
+        pass_filenames: false
+      - id: corpus-alignment
+        name: corpus alignment
+        entry: bash -c 'python3 skills/translation-memory-builder/scripts/validate_corpus_alignment.py --corpus-dir data/past_markdown_files --strict; status=$?; make clean-pycache >/dev/null; exit $status'
+        language: system
+        pass_filenames: false

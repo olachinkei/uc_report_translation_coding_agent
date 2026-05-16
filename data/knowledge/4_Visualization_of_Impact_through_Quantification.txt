@@ -1,0 +1,55 @@
+# Visualization of Impact through Quantification
+## Example (2024)
+
+### JP
+定量化によるインパクトの可視化
+
+ユニゾンにおけるESGの取り組みは下記の方法で定量化とデータ蓄積を行っています。
+
+RIMM Sustainability
+投資先企業のESGの取り組みを可視化するため、ユニゾンはRIMM Sustainability (以下「RIMM」)とGP向けのプラットフォームを共同開発しました。
+
+RIMMは「あらゆる規模の企業にとって、サステナビリティに対する取り組みを、シンプルで、アクセスしやすく、楽しめ、かつ正当な見返りが得られるものとすること」を事業目的に掲げています。具体的には、Global Reporting Initiative (GRI)やSustainability Accounting Standards Board(SASB)などの国際基準に則った形で、企業のサステナビリティに対する取り組みを可視化、定量化して評価するためのソフトウエア・プラットフォーム・サービスを提供しています。
+
+RIMMのプラットフォームでは、評価対象となる企業から提供されるサステナビリティに対する取り組みに関する情報と、RIMMが保有するデータベースに取り込まれたグローバルの上場企業・非上場企業のサステナビリティに関する情報を独自のアルゴリズムを用いて組み合わせ、評価対象企業の取り組みを「RIMMスコア」「SDGsスコア」という形で可視化します。また提供されるフィードバックレポートでは現状と改善点が同業他社のケーススタディと共に示され、具体的なアクションにつながるように工夫されています。
+
+GP向けダッシュボードでは各投資先の回答とベンチマークの結果を横比較して一覧で確認することができます。取り組みが出遅れているKPIはその原因を深掘りし、他の投資先におけるベストプラクティスの導入を促すなど、投資先横断で施策を前に進めることに役立っています。
+
+ユニゾン独自の2段階CDEのフレームワークに加え、RIMMのアセスメントを通じた第三者評価と同業他社とのベンチマークを行うことで、各投資先のESGの取り組みが独りよがりにならず、それぞれの業界で重要視されるマテリアリティを意識したものに進化しました。またRIMMのプラットフォームは経年で蓄積したデータを元にしたサステナビリティ・レポートの自動作成を支援しており、今後IPOや対外的な開示を予定している投資先での活用も可能になります。
+
+ESG Data Convergence Initiative 
+ユニゾンはESG Data Convergence Initiative (以下「EDCI」)に日本のGPとして初めて参画し、毎年データの提供を行っています。
+
+EDCIはグローバル大手PEファームやアセット・マネージャーを含む約450社のGPとLPが協働し、ESGの主要指標を統一して収集・報告することに合意した枠組みです。GPによる開示指標を統一し、パフォーマンス比較が可能となるデータベースを作成するPE業界主導の初の取り組みとなっています。
+
+EDCIへの参画に先立ち、ユニゾンは全投資先でGHG排出量の計測を開始しました。自社で生産設備を持つ業態では既に直接排出のScope 1と間接排出のScope 2の計測を行っているところもありましたが、大半の投資先でGHG排出量の計測は初めての試みであったため、自社で換算ができない場合は外部の排出量計測サービスを紹介し、直接排出・間接排出のデータ化を行ないました。計測結果はRIMM及びEDCIそれぞれでベンチマークを行いましたが、排出量削減に向けた具体的な取り組みはこれからになり、また将来的にはサプライチェーン上の排出量も含めたScope 3の把握にも取り組みを拡げていく必要があります。
+
+EDCIは集まったデータを元に上場企業とのベンチマークを行っており、PE傘下の企業群は出発点では出遅れが見られるものの、投資期間中の改善幅・変化値が上場企業を上回ることが確認できています。コントロール投資を行うPEファンドが組織に変化を促す力が定量的に示され、かつ同じ定義でそれぞれのGPのトラックレコードを確認できるEDCIの取り組みは、グリーンウォッシングが常に懸念されるESG開示における透明性を確保するものです。
+
+サステナビリティに関する取り組みは一時的なものではありません。ユニゾンの投資が出口を迎えた後も各社が継続的にレベルアップを図っていくべき活動です。私たちは定量化とベンチマークを材料に、投資先企業の経営者の方々との議論を繰り返すことで、各社の　取り組みが持続可能なものとなるように日々の活動を進めています。
+
+
+### EN
+Unison quantifies and accumulates data on ESG initiatives through the following methods.
+
+Rimm Sustainability (“Rimm”)
+To visualize the ESG initiatives of our portfolio companies, Unison co-developed a platform for GPs with Rimm Sustainability.
+
+Rimm's mission is to "make sustainability simple, accessible, authentic, fun and rewarding for companies of all sizes." Specifically, it provides a software platform service that visualizes, quantifies, and evaluates corporate sustainability initiatives in accordance with international standards such as the Global Reporting Initiative (GRI) and the Sustainability Accounting Standards Board (SASB).
+
+Rimm's platform takes information on sustainability initiatives provided by the companies being evaluated and combines it with Rimm's database of global public and private company sustainability information. Using a proprietary algorithm, it visualizes the evaluated company's initiatives in the form of "Rimm scores" and "SDGs scores." It also provides feedback reports that highlight areas for improvement, along with case studies from industry peers, to encourage concrete action.
+
+Each portfolio company answers a series of questions posed on the platform, and the GP dashboard allows for a side-by-side comparison of these responses with benchmark results from other companies. This helps to identify KPIs where efforts are lagging, delve deeper into the causes of any such issue, and encourage the adoption of best practices from other portfolio companies, thereby promoting initiatives across all investments.
+
+In addition to Unison's unique two-stage “CDE” framework, third-party evaluation and industry benchmarking through Rimm's assessments have ensured that each portfolio company's ESG initiatives are relevant and aligned with the materiality considerations of their respective industries. Rimm's platform also supports the automatic creation of sustainability reports based on data accumulated over time, which can be utilized by portfolio companies planning IPOs or other external disclosures.
+
+ESG Data Convergence Initiative (“EDCI”)
+Unison is the first Japanese GP to participate in the ESG Data Convergence Initiative, under which we provide data annually.
+
+The EDCI is a framework in which approximately 450 GPs and LPs, including major global PE firms and asset managers, collaborate to collect and report key ESG metrics in a standardized manner. It is the first PE industry-led initiative to standardize GP disclosure indicators and create a database that enables performance comparisons.
+Unison began measuring GHG emissions across all portfolio companies as we prepared to join the EDCI. While some companies with production facilities had already been measuring Scope 1 (direct) and Scope 2 (indirect) emissions, this was a new endeavor for most. We introduced those unable to calculate emissions in-house to external emissions measurement services able to collect and digitize data on direct and indirect emissions. The results of these measurement efforts have been and continue to be benchmarked against comparable figures on both the Rimm and EDCI platforms. However, concrete initiatives to reduce emissions are still in their early stages, and we need to expand our efforts to include Scope 3 emissions (emissions from all sources not covered by Scopes 1 and 2, and including those from supply chains) in the future.
+
+
+The EDCI benchmarks collected data against comparable data for listed companies, revealing that while PE-backed companies tend to lag initially, the magnitude of improvement and change during the investment period surpasses that of listed companies. This demonstrates the power of PE funds, as control investors, to drive organizational change. The EDCI's ability to quantitatively showcase this impact and provide a standardized way to compare GP track records ensures transparency in ESG disclosures, where greenwashing is always a concern.
+
+Our portfolio companies’ sustainability initiatives are not temporary endeavors; they require continuous improvement even after Unison exits its investments. We utilize quantification and benchmarking as a basis for ongoing discussions with the management of our portfolio companies, ensuring that their efforts are sustainable in the long term.

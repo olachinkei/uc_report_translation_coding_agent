@@ -1,0 +1,54 @@
+# Unison’s Approach to ESG
+
+## Example (2024)
+### JP
+ユニゾンは創業時から経済的利益を超えたインパクトと社会的価値の追求を事業目的としてきました。それは創業理念を表したGuiding Principlesにおいても明示されています。
+
+While we rigorously pursue profitable opportunities, we aim to make an impact on the business community we are involved in.
+
+We seek to create business transactions which have value not only to ourselves but also to society.
+
+この理念のもと、従業員の就業環境の整備と士気向上をはじめとする諸施策が投資先の長期的な業績と企業価値向上につながると考え、1 号ファンド以来一貫して実践してきました。ESGへの取り組みがプライベート・エクイティ業界でも重要視されるようになり、2016年にESG規定を制定し、2017年以降はPRIの署名機関としての開示を行っています。また2020年にはユニゾン独自のESGのフレームワークを定め、投資先への展開を開始しました。足元ではインパクトの可視化の取り組みをはじめ、将来的には私たちのESGの取り組みが投資リターンにポジティブに影響していることを定量的に示していきたいと考えています。
+
+私たちは、プライベート・エクイティ投資はESG の取り組みを推進するために最適なガバナンス・モデルであると考えています。コントロール投資を行う私たちは自らの追求するESGアジェンダを投資先企業において実現することのできる立ち位置にあり、上場株の投資家よりも重い責任を負っていると自認しています。特にユニゾンが投資対象とする中堅中小企業においては、社内の組織的・設備的インフラの整備が事業規模に比較しても立ち遅れている企業が多く、これらを整備していくことは業績や企業価値の向上に直結します。また、上場企業として投資家に高く評価される、あるいは上場企業が子会社としてグループに迎え入れる判断をするにあたって高く評価される、そんな企業のあり方を事業や財務面だけでなく社会や環境との関係においても追求することは、投資の出口においてもよい成果をもたらすと考えています。日本のプライベート・エクイティ・ファンドの間でもESGの取り組みはまだ手探りの状態にありますが、ユニゾンは日本プライベート・エクイティ協会のESG委員会の立ち上げに参画し、各種の勉強会やGP間でのベスト・プラクティスの共有を積極的に企画し、業界全体での取り組みを前に進めています。
+
+
+1998	ユニゾン・キャピタル創業
+Guiding Principles制定
+1999	1号ファンド設⽴
+2004	2号ファンド設⽴
+2007	共同投資ファンド設⽴
+2009	3号ファンド設⽴
+2015	4号ファンド設⽴
+2016	ESG規定を制定
+2017	Principle for Responsible Investment（PRI）に署名
+2020	2段階CDEのフレームワークの設計・投資先企業への展開を開始
+	RIMM Sustainabilityとの共同開発を開始
+2021	5号ファンド設⽴
+2022	UCヘルスケア・プロバイダー共同投資ファンド設立
+	ESG Data Convergence Initiativeに参画　
+2023	全投資先でGHG排出量の計測開始
+### EN
+As stated in the Guiding Principles which embody the underlying philosophy serving as the core of our work as investors, Unison has strived to create social impact from its investment activities since its inception (excerpt from Guiding Principles below).  
+
+While we rigorously pursue profitable opportunities, we aim to make an impact on the business community we are involved in.
+We seek to create business transactions which have value not only to ourselves but also to society.
+
+Based on the belief that improvements related to both the working environments and employee motivation within our portfolio companies ultimately drive value over the long-term, we have been undertaking such initiatives since Fund I. In response to growing awareness toward ESG in the private equity industry, we established ESG policy in 2016, became a PRI signatory in 2017, and have reorganized our investment activities and reporting to comply with PRI standards since. In 2020, we formulated Unison’s unique ESG framework and started to roll it out to our portfolio companies. We are currently working on visualizing our impact, and in the future, we hope to quantitatively demonstrate that our ESG efforts are having a positive impact on investment returns.
+It is our unwavering belief that control investments led by private equity funds provide the optimal governance structure to effectively pursue ESG initiatives. Given their influence on portfolio company management, the responsibility private equity investors bear toward achieving ESG goals outweighs that of public market investors. Particularly for small to mid-cap investment strategies like Unison’s, it is often the case that portfolio companies lack the organizational infrastructure and facilities needed to pursue growth, implying ESG goals are very much aligned with financial objectives. In addition, ESG initiatives significantly impact exit valuations as well, especially while considering a public market exit, or a trade sale to a public company. While ESG initiatives are still in their early stages in the Japanese private equity industry, Unison has participated in establishing the ESG Committee of the Japan Private Equity Association (JPEA). We actively plan various study sessions and conduct best practice sharing among GPs to advance ESG initiatives across the industry.
+
+
+1998	Unison Capital Founded
+Establishment of Guiding Principles
+1999	Establishment of Fund I
+2004	Establishment of Fund II
+2007	Establishment of a co-investment fund
+2009	Establishment of Fund III
+2015	Establishment of Fund IV
+2016	Establishment of ESG Policies
+2017	Signing the Principles for Responsible Investment (PRI)
+2020	Establishment of a two-stage CDE framework and deployment at portfolio companies
+Start of co-development with Rimm Sustainability2021	Establishment of Fund V
+2022	Establishment of the UC Healthcare Provider Co-Investment Fund
+Participation in the ESG Data Convergence Initiative (EDCI)2023	Start of GHG emissions measurement at all portfolio companies
+

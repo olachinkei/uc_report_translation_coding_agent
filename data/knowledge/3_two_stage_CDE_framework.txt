@@ -1,0 +1,40 @@
+# Two-Stage “CDE” Framework and Monitoring Approach
+
+## Example (2024)
+
+### JP
+２段階CDEのフレームワークとモニタリングにおけるアプローチ
+
+ユニゾンでは中堅中小企業へのコントロール投資を前提としたESGの取り組みを下記の2 段階のフレームワークで示し、各投資先に展開しています。
+
+【第一段階】Community, Diversity & Empowerment
+- C：企業の属する地域コミュニティ、顧客コミュニティへの貢献
+- D：従業員の多様性確保。管理職以上の女性比率の引き上げ。取締役会のスキルマトリックス作成とユニゾン外の社外取締役の積極的な招聘
+- E：従業員の就労環境の整備、正しい評価と処遇の実施。情報共有を通じたエンパワメント 等
+【第二段階】Carbon, Disposables & Energy
+- C：企業活動を通じた二酸化炭素排出量の削減
+- D：プラスチックをはじめとした環境負荷の高い素材の使用削減
+- E：水を含むエネルギー消費の効率化。再生可能エネルギーの積極的な採用 等
+
+事業規模が必ずしも大きくないユニゾンの各投資先において、当初から目に見える形で環境インパクトの改善を行うことは組織的にハードルが高いものとなります。まずは自分たちの手で明示的な改善ができる第一段階の設計を一緒に行い実行に移すことで、ESGの取り組みに対するハードルを下げ、経営チームが手応えの得やすい人材採用や従業員のリテンションに直結する施策につなげます。一定の効果を組織として実感できたところで、環境インパクトを中心とした第二段階の取り組みを進めます。
+
+第一段階、第二段階ともに、具体的な施策は、企業のミッションステートメントや投資テーマに沿い、事業規模や組織の状況に即したものを投資先ごとに設定しています。取り組む施策の策定においては、各業界におけるマテリアリティやベストプラクティスを参照しながら、投資先ごとに目標とマイルストーン設定を行います。このプロセスを投資直後の事業計画の策定及び投資期間中の事業計画の見直しの中に織り込み、経営陣の年次の定性評価に加えることで、事業面でのKPIと同様に継続的なモニタリングを行っています。
+
+### EN
+Unison established the following two-stage “CDE” framework intended to best address ESG-related issues specific to small to mid-cap companies, which has been applied across our portfolio companies.
+
+[Stage 1] Community, Diversity & Empowerment
+- C: Contribution to local regional communities and customer communities which the company serves
+- D: Diversity and inclusion (female representation in management positions, board diversity)
+- E: Improvement of working environments (fairness in evaluation and compensation, empowerment of employees through transparent communication and sharing of information) 
+
+[Stage 2] Carbon, Disposables & Energy
+- C: Reduction of carbon emissions
+- D: Reduction of plastic and other environmentally harmful materials  
+- E: Improvement in efficiency of water and energy consumption; active utilization of renewable energy
+
+Two-Stage “CDE” Framework
+
+Making visible environmental improvements can be challenging for Unison's portfolio companies, which are mostly small to mid-cap. Under the above framework, we first work together with our portfolio companies to design Stage 1 initiatives, which are comparatively easy to tackle. By carrying out initiatives that directly contribute to talent acquisition and employee retention, management teams can observe tangible results and overcome psychological barriers to ESG engagement. Once they experience these initial successes, we proceed to designing Stage 2 initiatives, which focus on environmental impact.
+
+For both Stage 1 and 2, specific initiatives to be implemented are tailored in accordance with each portfolio company’s mission statement, investment thesis, and capacity, among other factors. Furthermore, we set specific goals and targets in accordance with industry materialities and best practices. Lastly, these processes are incorporated within each portfolio company’s mid-term business plan and management evaluation process, in order to ensure alignment between Unison and each portfolio company’s management.

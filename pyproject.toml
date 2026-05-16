@@ -1,0 +1,38 @@
+[project]
+name = "uc-report-translation-coding-agent"
+version = "0.1.0"
+description = "Section-based Japanese-to-English report translation helpers with reusable translation memory."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pre-commit>=3.7",
+  "ruff>=0.5",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [
+  "data/past_raw_files",
+  "data/past_markdown_files",
+]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "UP",
+  "B",
+  "SIM",
+]
+ignore = [
+  "E501",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Source Preparation"
+  short_description: "Convert Word reports into clean translation-ready markdown"
+  default_prompt: "Use $report-source-preparation to convert a new Word or rough markdown report into clean Japanese markdown with reliable headings for translation."
