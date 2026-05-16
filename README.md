@@ -12,7 +12,7 @@
 - レビュー済み markdown を Word `.docx` に変換する
 - 過去レポートを translation memory として蓄積する
 
-## できること
+## 使い方
 
 ### 1. docx を markdown に変換する
 
