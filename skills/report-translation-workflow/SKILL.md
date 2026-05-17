@@ -6,6 +6,7 @@ description: Use this skill when translating a new Japanese markdown report into
 # Report Translation Workflow
 
 Use this skill for the production path: new Japanese markdown in, English markdown out.
+When the user gives only a short request such as "report-translation-workflow を使って、data/past_markdown_files/Unison Impact_J_2025.md を英語に翻訳して", infer the standard workflow and do not ask for missing boilerplate.
 
 ## Inputs To Confirm
 
@@ -15,6 +16,15 @@ Use this skill for the production path: new Japanese markdown in, English markdo
 - the new Japanese markdown file to translate
 
 If `data/knowledge/section_pairs.jsonl` does not exist or looks stale after data updates, first use `$translation-memory-builder`.
+
+## Defaults To Infer
+
+- Use `prompt.md`, `data/knowledge/`, and `data/knowledge/section_pairs.jsonl` automatically.
+- Write the English draft to `outputs/drafts/`.
+- If the source file name contains `_J_`, replace it with `_E_` for the output name.
+  - Example: `data/past_markdown_files/Unison Impact_J_2025.md` -> `outputs/drafts/Unison Impact_E_2025.md`
+- Preserve numbers, dates, company names, fund names, and markdown heading structure without requiring the user to restate this.
+- Run `make check` before handing back the result.
 
 ## Translation Workflow
 

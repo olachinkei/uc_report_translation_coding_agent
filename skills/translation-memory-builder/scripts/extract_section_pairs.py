@@ -167,42 +167,94 @@ def file_pairs(corpus_dir: Path) -> list[tuple[Path, Path]]:
     return pairs
 
 
-def build_records(corpus_dir: Path) -> list[dict[str, object]]:
+def require_markdown(path: Path, role: str) -> None:
+    if not path.exists():
+        raise SystemExit(f"{role} markdown file not found: {path}")
+    if path.suffix.lower() != ".md":
+        raise SystemExit(f"{role} must be a `.md` file: {path}")
+
+
+def build_pair_records(jp_file: Path, en_file: Path) -> list[dict[str, object]]:
+    require_markdown(jp_file, "Japanese source")
+    require_markdown(en_file, "English source")
     records: list[dict[str, object]] = []
 
-    for jp_file, en_file in file_pairs(corpus_dir):
-        jp_sections = drop_noise_sections(
-            drop_preface_sections(
-                parse_sections(jp_file.read_text(encoding="utf-8"))
-            )
+    jp_sections = drop_noise_sections(
+        drop_preface_sections(
+            parse_sections(jp_file.read_text(encoding="utf-8"))
         )
-        en_sections = drop_noise_sections(
-            drop_preface_sections(
-                parse_sections(en_file.read_text(encoding="utf-8"))
-            )
+    )
+    en_sections = drop_noise_sections(
+        drop_preface_sections(
+            parse_sections(en_file.read_text(encoding="utf-8"))
         )
-        common = min(len(jp_sections), len(en_sections))
+    )
+    common = min(len(jp_sections), len(en_sections))
 
-        for idx in range(common):
-            jp_section = jp_sections[idx]
-            en_section = en_sections[idx]
-            records.append(
-                {
-                    "jp_file": jp_file.name,
-                    "en_file": en_file.name,
-                    "section_index": idx,
-                    "year": re.search(r"_(\d{4})\.md$", jp_file.name).group(1) if re.search(r"_(\d{4})\.md$", jp_file.name) else "",
-                    "jp_heading": jp_section["heading"],
-                    "en_heading": en_section["heading"],
-                    "jp_level": jp_section["level"],
-                    "en_level": en_section["level"],
-                    "jp_text": clean_body(str(jp_section["body"])),
-                    "en_text": clean_body(str(en_section["body"])),
-                    "labels": infer_labels(str(jp_section["heading"]), clean_body(str(jp_section["body"]))),
-                }
-            )
+    for idx in range(common):
+        jp_section = jp_sections[idx]
+        en_section = en_sections[idx]
+        records.append(
+            {
+                "jp_file": jp_file.name,
+                "en_file": en_file.name,
+                "section_index": idx,
+                "year": re.search(r"_(\d{4})\.md$", jp_file.name).group(1) if re.search(r"_(\d{4})\.md$", jp_file.name) else "",
+                "jp_heading": jp_section["heading"],
+                "en_heading": en_section["heading"],
+                "jp_level": jp_section["level"],
+                "en_level": en_section["level"],
+                "jp_text": clean_body(str(jp_section["body"])),
+                "en_text": clean_body(str(en_section["body"])),
+                "labels": infer_labels(str(jp_section["heading"]), clean_body(str(jp_section["body"]))),
+            }
+        )
 
     return records
+
+
+def build_records(corpus_dir: Path) -> list[dict[str, object]]:
+    records: list[dict[str, object]] = []
+    for jp_file, en_file in file_pairs(corpus_dir):
+        records.extend(build_pair_records(jp_file, en_file))
+    return records
+
+
+def load_section_records(memory_file: Path) -> list[dict[str, object]]:
+    if not memory_file.exists():
+        return []
+
+    records: list[dict[str, object]] = []
+    with memory_file.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if record.get("record_type") == "heading_translation":
+                continue
+            records.append(record)
+    return records
+
+
+def replace_pair_records(
+    existing_records: list[dict[str, object]],
+    pair_records: list[dict[str, object]],
+    jp_file: Path,
+    en_file: Path,
+) -> list[dict[str, object]]:
+    filtered = [
+        record
+        for record in existing_records
+        if not (
+            record.get("jp_file") == jp_file.name
+            and record.get("en_file") == en_file.name
+        )
+    ]
+    return filtered + pair_records
+
+
+def with_heading_index(section_records: list[dict[str, object]]) -> list[dict[str, object]]:
+    return build_heading_translation_records(section_records) + section_records
 
 
 def normalize_heading_key(text: str) -> str:
@@ -311,12 +363,29 @@ def build_heading_translation_records(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--corpus-dir", required=True, type=Path)
+    parser.add_argument("--corpus-dir", type=Path)
+    parser.add_argument("--jp-file", type=Path)
+    parser.add_argument("--en-file", type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
-    section_records = build_records(args.corpus_dir)
-    records = build_heading_translation_records(section_records) + section_records
+    if args.jp_file or args.en_file:
+        if not args.jp_file or not args.en_file:
+            raise SystemExit("Both --jp-file and --en-file are required when updating a specific pair.")
+        pair_records = build_pair_records(args.jp_file, args.en_file)
+        existing_records = load_section_records(args.output)
+        section_records = replace_pair_records(
+            existing_records,
+            pair_records,
+            args.jp_file,
+            args.en_file,
+        )
+    elif args.corpus_dir:
+        section_records = build_records(args.corpus_dir)
+    else:
+        raise SystemExit("Specify either --jp-file/--en-file or --corpus-dir.")
+
+    records = with_heading_index(section_records)
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
     with args.output.open("w", encoding="utf-8") as fh:

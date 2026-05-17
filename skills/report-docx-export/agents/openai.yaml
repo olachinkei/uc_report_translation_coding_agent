@@ -1,4 +1,4 @@
 interface:
   display_name: "Report DOCX Export"
-  short_description: "Export reviewed markdown reports to Word"
-  default_prompt: "Use $report-docx-export to convert a reviewed markdown report in outputs/drafts/ into a Word .docx file in outputs/final/."
+  short_description: "Create Word .docx files from markdown reports"
+  default_prompt: "Use $report-docx-export to convert a reviewed .md report into a Word file, automatically writing the result to outputs/final/."

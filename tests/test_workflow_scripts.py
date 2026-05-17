@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -48,6 +49,23 @@ class SourcePreparationScriptTests(unittest.TestCase):
 
             with self.assertRaisesRegex(SystemExit, "Source must be a `.docx` file"):
                 source_converter.resolve_docx_path(str(source))
+
+    def test_resolve_source_path_accepts_markdown_file(self) -> None:
+        with TemporaryDirectory() as tmp_dir:
+            source = Path(tmp_dir) / "report.md"
+            source.write_text("# Source\n", encoding="utf-8")
+
+            self.assertEqual(source_converter.resolve_source_path(str(source)), source)
+
+    def test_write_markdown_copies_markdown_source(self) -> None:
+        with TemporaryDirectory() as tmp_dir:
+            source = Path(tmp_dir) / "source.md"
+            output = Path(tmp_dir) / "output.md"
+            source.write_text("# Source\n\n本文\n", encoding="utf-8")
+
+            source_converter.write_markdown(source, output)
+
+            self.assertEqual(output.read_text(encoding="utf-8"), "# Source\n\n本文\n")
 
     def test_docx_default_output_uses_markdown_corpus_dir(self) -> None:
         output = source_converter.default_output_path(Path("Unison Impact_J_2025.docx"))
@@ -110,6 +128,86 @@ class DocxExportScriptTests(unittest.TestCase):
 
 
 class TranslationPromptScriptTests(unittest.TestCase):
+    def test_pair_update_replaces_only_explicit_file_pair(self) -> None:
+        with TemporaryDirectory() as tmp_dir:
+            tmp = Path(tmp_dir)
+            jp_file = tmp / "Unison Impact_J_2025.md"
+            en_file = tmp / "Unison Impact_E_2025.md"
+            jp_file.write_text("# ごあいさつ\n\n投資家の皆さま\n", encoding="utf-8")
+            en_file.write_text("# Greeting\n\nTo our valued investors,\n", encoding="utf-8")
+
+            existing_records = [
+                {
+                    "record_type": "heading_translation",
+                    "jp_file": "__heading_index__",
+                    "en_file": "__heading_index__",
+                    "jp_heading": "古い見出し",
+                    "en_heading": "Old Heading",
+                    "jp_text": "",
+                    "en_text": "",
+                    "labels": ["heading"],
+                },
+                {
+                    "jp_file": "Unison Impact_J_2024.md",
+                    "en_file": "Unison Impact_E_2024.md",
+                    "section_index": 0,
+                    "year": "2024",
+                    "jp_heading": "編集後記",
+                    "en_heading": "Afterword",
+                    "jp_level": 1,
+                    "en_level": 1,
+                    "jp_text": "編集後記です。",
+                    "en_text": "Afterword.",
+                    "labels": ["afterword"],
+                },
+                {
+                    "jp_file": "Unison Impact_J_2025.md",
+                    "en_file": "Unison Impact_E_2025.md",
+                    "section_index": 0,
+                    "year": "2025",
+                    "jp_heading": "古いごあいさつ",
+                    "en_heading": "Old Greeting",
+                    "jp_level": 1,
+                    "en_level": 1,
+                    "jp_text": "old",
+                    "en_text": "old",
+                    "labels": ["greeting"],
+                },
+            ]
+            output = tmp / "section_pairs.jsonl"
+            output.write_text(
+                "\n".join(json.dumps(record, ensure_ascii=False) for record in existing_records) + "\n",
+                encoding="utf-8",
+            )
+
+            pair_records = memory_extractor.build_pair_records(jp_file, en_file)
+            merged = memory_extractor.replace_pair_records(
+                memory_extractor.load_section_records(output),
+                pair_records,
+                jp_file,
+                en_file,
+            )
+            records = memory_extractor.with_heading_index(merged)
+
+            section_pairs = [
+                record for record in records if record.get("record_type") != "heading_translation"
+            ]
+            self.assertEqual(len(section_pairs), 2)
+            self.assertTrue(
+                any(record["jp_file"] == "Unison Impact_J_2024.md" for record in section_pairs)
+            )
+            self.assertTrue(
+                any(
+                    record["jp_file"] == "Unison Impact_J_2025.md"
+                    and record["jp_heading"] == "ごあいさつ"
+                    for record in section_pairs
+                )
+            )
+            self.assertFalse(
+                any(record.get("jp_heading") == "古いごあいさつ" for record in section_pairs)
+            )
+            self.assertEqual(records[0]["record_type"], "heading_translation")
+
     def test_heading_translation_records_are_searchable_first_class_memory(self) -> None:
         section_records = [
             {

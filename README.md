@@ -12,78 +12,31 @@
 - レビュー済み markdown を Word `.docx` に変換する
 - 過去レポートを translation memory として蓄積する
 
-## 使い方
+## 利用できる Skills と使い方
 
-### 1. docx を markdown に変換する
+この repository には、Codex が作業内容に応じて使う専用 skill が 4つあります。ユーザーが細かいコマンドを覚える必要はありませんが、依頼文に skill 名を含めると、Codex がより迷わず作業できます。
 
-使う skill:
+| 用途 | skill | 主な入出力 | Codex への依頼例 |
+| --- | --- | --- | --- |
+| 既存の Word 原稿や markdown 原稿から、翻訳準備用の日本語 markdown を作る | `@report-source-preparation` | `data/past_raw_files/*.docx` / `*.md` → `data/past_markdown_files/*_J_*.md` | `@report-source-preparation` を使って、`data/past_raw_files/Unison Impact_J_2025.docx` を md file に変更してください。 |
+| 日本語 markdown を英語 markdown に翻訳し、過去訳・辞書・見出し対応表を参照してレビューする | `@report-translation-workflow` | `data/past_markdown_files/*_J_*.md` → `outputs/drafts/*_E_*.md` | `@report-translation-workflow` を使って、`data/past_markdown_files/Unison Impact_J_2025.md` を英語に翻訳して。 |
+| 指定した日英 markdown ペアから、再利用できる翻訳メモリと見出し対応表を更新する | `@translation-memory-builder` | `data/past_markdown_files/*_J_*.md` + `*_E_*.md` → `data/knowledge/section_pairs.jsonl` | `@translation-memory-builder` を使って、`data/past_markdown_files/Unison Impact_J_2025.md` と `data/past_markdown_files/Unison Impact_E_2025.md` から `data/knowledge/section_pairs.jsonl` を更新してください。 |
+| レビュー済み markdown から Word `.docx` を作成する | `@report-docx-export` | `outputs/drafts/*.md` → `outputs/final/*.docx` | `@report-docx-export` を使って、`outputs/drafts/Unison Impact_E_2025.md` を Wordファイルに変換して。 |
 
-- `$report-source-preparation`
-
-Word 原稿を受け取ったら、まず元ファイルを次の場所に置きます。
-
-```text
-data/past_raw_files/
-```
-
-Codex には次のように依頼してください。
+レビューや修正も、同じ `@report-translation-workflow` に依頼できます。
 
 ```text
-data/past_raw_files/Unison Impact_J_2025.docx を、
-翻訳準備用の markdown に変換してください。
-
-出力先は data/past_markdown_files/Unison Impact_J_2025.md にしてください。
-見出し構造、数値、固有名詞、表が崩れていないかも確認してください。
-```
-
-出力先:
-
-```text
-data/past_markdown_files/Unison Impact_J_2025.md
-```
-
-元の `.docx` は原本なので編集しません。Word 由来の不要なラベルや空見出しがある場合は、markdown 側だけを整えます。
-
-### 2. markdown を英語 markdown に翻訳する
-
-使う skill:
-
-- `$report-translation-workflow`
-
-翻訳対象の日本語 markdown は次の場所に置きます。
-
-```text
-data/past_markdown_files/
-```
-
-Codex には次のように依頼してください。
-
-```text
-data/past_markdown_files/Unison Impact_J_2025.md を英語に翻訳して、
-outputs/drafts/Unison Impact_E_2025.md に保存してください。
-
-過去レポート、data/knowledge、prompt.md を参照してください。
-数値、年号、会社名、ファンド名、見出し構造は変えないでください。
-```
-
-出力先:
-
-```text
-outputs/drafts/Unison Impact_E_2025.md
-```
-
-翻訳後は、まずレビューを依頼してください。
-
-```text
+@report-translation-workflow を使って、
 outputs/drafts/Unison Impact_E_2025.md を、
 data/past_markdown_files/Unison Impact_J_2025.md と照合してレビューしてください。
 
 数値、固有名詞、見出し構造、抜け漏れを重点的に見てください。
 ```
 
-直接 `outputs/drafts/*.md` を編集しても構いません。大きな修正が複数ある場合は、対象 section と変更方針を分けて Codex に依頼すると安定します。
+大きな修正が複数ある場合は、対象 section と変更方針を分けて Codex に依頼すると安定します。
 
 ```text
+@report-translation-workflow を使って、
 outputs/drafts/Unison Impact_E_2025.md を修正してください。
 
 1. 「Greeting」の第 3 段落を、投資家向けに少し自然で前向きな表現にしてください。
@@ -92,34 +45,12 @@ outputs/drafts/Unison Impact_E_2025.md を修正してください。
 4. 数値、年号、会社名、ファンド名は変更しないでください。
 ```
 
-### 3. markdown から docx を作る
-
-使う skill:
-
-- `$report-docx-export`
-
-レビュー済みの英語 markdown を Word に変換します。Codex には次のように依頼してください。
-
-```text
-outputs/drafts/Unison Impact_E_2025.md を Word docx に変換してください。
-
-出力先は outputs/final/Unison Impact_E_2025.docx にしてください。
-変換後、ファイルが作成されていることも確認してください。
-```
-
-出力先:
-
-```text
-outputs/final/Unison Impact_E_2025.docx
-```
-
 Word の見た目を既存テンプレートに寄せたい場合は、reference docx も一緒に指定してください。
 
 ```text
+@report-docx-export を使って、
 outputs/drafts/Unison Impact_E_2025.md を Word docx に変換してください。
 path/to/reference.docx を reference docx として使ってください。
-
-出力先は outputs/final/Unison Impact_E_2025.docx にしてください。
 ```
 
 ## その他

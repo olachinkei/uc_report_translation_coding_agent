@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert a source Word docx report into markdown for translation preparation."""
+"""Create a translation-preparation markdown file from a source report."""
 
 from __future__ import annotations
 
@@ -31,6 +31,11 @@ def require_pandoc() -> str:
     return pandoc
 
 
+def require_supported_source(path: Path) -> None:
+    if path.suffix.lower() not in {".docx", ".md"}:
+        raise SystemExit(f"Source must be a `.docx` or `.md` file: {path}")
+
+
 def resolve_docx_path(raw_source: str) -> Path:
     candidate = Path(raw_source)
     if candidate.is_absolute() and candidate.exists():
@@ -50,26 +55,35 @@ def resolve_docx_path(raw_source: str) -> Path:
     raise SystemExit(f"Source docx not found: {raw_source}")
 
 
+def resolve_source_path(raw_source: str) -> Path:
+    candidate = Path(raw_source)
+    if candidate.is_absolute() and candidate.exists():
+        require_supported_source(candidate)
+        return candidate
+
+    direct = ROOT / raw_source
+    if direct.exists():
+        require_supported_source(direct)
+        return direct
+
+    raw_candidate = RAW_DIR / raw_source
+    if raw_candidate.exists():
+        require_supported_source(raw_candidate)
+        return raw_candidate
+
+    raise SystemExit(f"Source report not found: {raw_source}")
+
+
 def default_output_path(source_path: Path) -> Path:
     return MARKDOWN_DIR / f"{source_path.stem}.md"
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("source", help="Source .docx path or filename in data/past_raw_files/.")
-    parser.add_argument("--output", type=Path, help="Output markdown path. Defaults to data/past_markdown_files/.")
-    parser.add_argument("--overwrite", action="store_true")
-    args = parser.parse_args()
+def write_markdown(source_path: Path, output_path: Path) -> None:
+    if source_path.suffix.lower() == ".md":
+        shutil.copy2(source_path, output_path)
+        return
 
     pandoc = require_pandoc()
-    source_path = resolve_docx_path(args.source)
-    output_path = args.output or default_output_path(source_path)
-
-    require_suffix(output_path, ".md", "Output")
-    ensure_output_available(output_path, args.overwrite)
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
     subprocess.run(
         [
             pandoc,
@@ -86,6 +100,24 @@ def main() -> None:
         cwd=ROOT,
         check=True,
     )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source", help="Source .docx or .md path, or filename in data/past_raw_files/.")
+    parser.add_argument("--output", type=Path, help="Output markdown path. Defaults to data/past_markdown_files/.")
+    parser.add_argument("--overwrite", action="store_true")
+    args = parser.parse_args()
+
+    source_path = resolve_source_path(args.source)
+    output_path = args.output or default_output_path(source_path)
+
+    require_suffix(output_path, ".md", "Output")
+    ensure_output_available(output_path, args.overwrite)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    write_markdown(source_path, output_path)
     print(f"Wrote markdown to {output_path}")
 
 

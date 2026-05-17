@@ -19,15 +19,28 @@ def load_extract_module(script_path: Path):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--corpus-dir", required=True, type=Path)
+    parser.add_argument("--corpus-dir", type=Path)
+    parser.add_argument("--jp-file", type=Path)
+    parser.add_argument("--en-file", type=Path)
     parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
 
     script_path = Path(__file__).resolve().parent / "extract_section_pairs.py"
     extractor = load_extract_module(script_path)
 
+    if args.jp_file or args.en_file:
+        if not args.jp_file or not args.en_file:
+            raise SystemExit("Both --jp-file and --en-file are required when validating a specific pair.")
+        file_pairs = [(args.jp_file, args.en_file)]
+    elif args.corpus_dir:
+        file_pairs = extractor.file_pairs(args.corpus_dir)
+    else:
+        raise SystemExit("Specify either --jp-file/--en-file or --corpus-dir.")
+
     had_gap = False
-    for jp_file, en_file in extractor.file_pairs(args.corpus_dir):
+    for jp_file, en_file in file_pairs:
+        extractor.require_markdown(jp_file, "Japanese source")
+        extractor.require_markdown(en_file, "English source")
         jp_sections = extractor.drop_noise_sections(
             extractor.drop_preface_sections(
                 extractor.parse_sections(jp_file.read_text(encoding="utf-8"))

@@ -1,6 +1,6 @@
 ---
 name: translation-memory-builder
-description: Use this skill when adding or refreshing past bilingual report data, extracting aligned Japanese-English section pairs, and updating reusable knowledge files that support future report translation.
+description: Use this skill when adding or refreshing one explicitly specified Japanese-English markdown report pair, extracting aligned section pairs, and updating reusable knowledge files that support future report translation.
 ---
 
 # Translation Memory Builder
@@ -23,8 +23,8 @@ Use this skill for the offline preparation path: maintain the reusable memory th
   - `Unison Impact_J_2024.md`
   - `Unison Impact_E_2024.md`
 - raw Word files should remain in `data/past_raw_files/` for traceability
-
-If a Japanese file has no English counterpart, keep it in the corpus but exclude it from the aligned memory index until a pair exists.
+- Do not process the whole folder by default. Ask for or infer one explicit Japanese file and one explicit English file.
+- If a Japanese file has no English counterpart, do not add it to the aligned memory index yet.
 
 ### 2. Normalize only what helps retrieval
 
@@ -36,24 +36,26 @@ The goal is retrieval quality, not retrospective editing.
 
 ### 3. Extract aligned section pairs
 
-Build `data/knowledge/section_pairs.jsonl` from the bilingual markdown corpus.
+Update `data/knowledge/section_pairs.jsonl` from one explicitly specified bilingual markdown pair.
 
 Plan-validate-execute:
 
-1. Inspect alignment gaps:
+1. Inspect alignment gaps for the specified pair:
 
 ```bash
 python3 skills/translation-memory-builder/scripts/validate_corpus_alignment.py \
-  --corpus-dir data/past_markdown_files \
+  --jp-file "data/past_markdown_files/Unison Impact_J_2025.md" \
+  --en-file "data/past_markdown_files/Unison Impact_E_2025.md" \
   --strict
 ```
 
 2. Fix heading or noise issues in the markdown corpus if alignment fails.
-3. Rebuild memory:
+3. Update memory for that pair only:
 
 ```bash
 python3 skills/translation-memory-builder/scripts/extract_section_pairs.py \
-  --corpus-dir data/past_markdown_files \
+  --jp-file "data/past_markdown_files/Unison Impact_J_2025.md" \
+  --en-file "data/past_markdown_files/Unison Impact_E_2025.md" \
   --output data/knowledge/section_pairs.jsonl
 ```
 
@@ -63,7 +65,7 @@ python3 skills/translation-memory-builder/scripts/extract_section_pairs.py \
 make check
 ```
 
-The script aligns sections by file pair and section order. It writes searchable `record_type: "heading_translation"` records at the top of `section_pairs.jsonl`, followed by full section-pair records. Review mismatches manually when one side contains extra headings or formatting artifacts.
+The script aligns the specified pair by section order. When `data/knowledge/section_pairs.jsonl` already exists, it preserves unrelated records, replaces records for the specified pair, then rewrites searchable `record_type: "heading_translation"` records at the top. Review mismatches manually when one side contains extra headings or formatting artifacts.
 
 ### 4. Curate reusable knowledge files
 
@@ -91,7 +93,7 @@ Good candidates:
 
 Before considering the memory update done, verify:
 
-- each Japanese file has the expected English partner
+- the specified Japanese file has the intended English partner
 - section headings are useful enough to drive retrieval
 - the top of `section_pairs.jsonl` contains searchable heading translation records
 - `section_pairs.jsonl` contains high-signal sections instead of giant unsegmented blobs
@@ -101,6 +103,7 @@ Before considering the memory update done, verify:
 ## Gotchas
 
 - `section_pairs.jsonl` is generated data. Edit corpus markdown or extraction logic, then regenerate it.
+- Do not scan or process every file in `data/past_markdown_files/` unless the user explicitly asks for a full rebuild.
 - Do not add a Japanese file to aligned memory until its English counterpart exists.
 - Raw Word files stay untouched; normalize only markdown corpus files.
 

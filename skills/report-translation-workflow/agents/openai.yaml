@@ -1,4 +1,4 @@
 interface:
   display_name: "Report Translation Workflow"
   short_description: "Retrieve examples and translate new reports"
-  default_prompt: "Use $report-translation-workflow to translate a new markdown report with retrieval from past bilingual examples."
+  default_prompt: "Use $report-translation-workflow to translate a Japanese markdown report into English, automatically using prompt.md, data/knowledge, and the default outputs/drafts path."

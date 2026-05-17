@@ -40,20 +40,22 @@ Debug prompts or review notes may be written to `outputs/prompts/` when needed.
 
 ## Refresh Translation Memory
 
-1. Inspect alignment:
+1. Inspect alignment for the explicit Japanese-English pair:
 
 ```bash
 python3 skills/translation-memory-builder/scripts/validate_corpus_alignment.py \
-  --corpus-dir data/past_markdown_files \
+  --jp-file "data/past_markdown_files/Unison Impact_J_2025.md" \
+  --en-file "data/past_markdown_files/Unison Impact_E_2025.md" \
   --strict
 ```
 
 2. Fix markdown corpus structure if needed.
-3. Regenerate memory:
+3. Update memory for that pair:
 
 ```bash
 python3 skills/translation-memory-builder/scripts/extract_section_pairs.py \
-  --corpus-dir data/past_markdown_files \
+  --jp-file "data/past_markdown_files/Unison Impact_J_2025.md" \
+  --en-file "data/past_markdown_files/Unison Impact_E_2025.md" \
   --output data/knowledge/section_pairs.jsonl
 ```
 

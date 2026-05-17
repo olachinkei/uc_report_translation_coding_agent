@@ -1,4 +1,4 @@
 interface:
   display_name: "Translation Memory Builder"
   short_description: "Bilingual corpus setup for report reuse"
-  default_prompt: "Use $translation-memory-builder to organize past Japanese-English reports into reusable translation memory assets."
+  default_prompt: "Use $translation-memory-builder to update translation memory from one specified Japanese markdown file and one specified English markdown file."
